@@ -105,12 +105,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - pnpm install moment-timezone               // format timezone ເລື່ອງເວລາ 
 - pnpm install dotenv 
 
-# Step
-1. create user-orm.ts
-2. data-source.ts
-3. package.json
-  - "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-  - "migration:generate": "pnpm run typeorm migration:generate -d ./src/common/infrastructure/database/data-source.ts ./src/common/infrastructure/database/migrations/update-schema",
-  - "migration:run": "pnpm run typeorm migration:run -d ./src/common/infrastructure/database/data-source.ts",
-4. pnpm run migration:generate
-5. pnpm run migration:run
+# Install Package Auth
+- pnpm install --save @nestjs/passport passport passport-local
+- pnpm install --save-dev @types/passport-local
+- pnpm install --save @nestjs/jwt passport-jwt
+- pnpm install --save-dev @types/passport-jwt

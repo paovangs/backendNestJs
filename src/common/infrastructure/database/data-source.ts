@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { UserOrmEntity } from './typeorms/entities/user.orm';
+import { StudentOrmEntity } from './typeorms/entities/student.orm';
 
 config(); // ໂຫຼດຈາກ .env
 export const dataSource = new DataSource({
@@ -12,7 +13,7 @@ export const dataSource = new DataSource({
   database: process.env.DB_NAME || 'apply_course',
   synchronize: Boolean(process.env.DB_SYNCHRONIZE) || false,
   logging: Boolean(process.env.DB_LOGGING || false),
-  entities: [UserOrmEntity], // ເພີ່ມ entities ທີ່ຈະໃຊ້
+  entities: [UserOrmEntity, StudentOrmEntity], // ເພີ່ມ entities ທີ່ຈະໃຊ້
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   migrationsTableName: 'migrations', // ຊື່ table ສຳຫຼັບເກັບ migrations
 });

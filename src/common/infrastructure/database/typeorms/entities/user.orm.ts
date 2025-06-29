@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { StudentOrmEntity } from './student.orm';
 
 @Entity('users')
 export class UserOrmEntity {
@@ -31,4 +33,7 @@ export class UserOrmEntity {
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deleted_at: Date | null;
+
+  @OneToOne(() => StudentOrmEntity, (student) => student.user)
+  student: StudentOrmEntity;
 }
