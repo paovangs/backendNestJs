@@ -7,6 +7,8 @@ import { UserOrmEntity } from 'src/common/infrastructure/database/typeorms/entit
 import { hashPassword } from 'src/common/utils/hash-password';
 import { TRANSACTION_MANAGER_SERVICE } from 'src/common/constants/inject-key';
 import { ITransactionManager } from 'src/common/infrastructure/transaction/transaction.interface';
+import { PaginatedResponse } from 'src/common/pagination/pagination.response';
+import { paginateQueryBuilder } from 'src/common/utils/pagination.builder';
 
 @Injectable()
 export class StudentService {
@@ -46,5 +48,18 @@ export class StudentService {
       console.log(error);
       throw error;
     }
+  }
+
+  async getAllStudent(
+    query: any,
+  ): Promise<PaginatedResponse<StudentOrmEntity>> {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 10;
+
+    const queryBuilder = this._studentRepo
+      .createQueryBuilder('student')
+      .leftJoinAndSelect('student.user', 'user');
+
+    return paginateQueryBuilder(queryBuilder, page, limit);
   }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
@@ -19,6 +20,7 @@ import { UpdateUserDto } from './modules/user/dto/update.dto';
 import { StudentService } from './modules/student/students.service';
 import { CreateStudentDto } from './modules/student/dto/create.dto';
 import { StudentOrmEntity } from './common/infrastructure/database/typeorms/entities/student.orm';
+import { PaginatedResponse } from './common/pagination/pagination.response';
 
 @Controller()
 export class AppController {
@@ -55,8 +57,8 @@ export class AppController {
     return await this.appService.getUsers();
   }
 
-  @Post('register')
-  async register(@Body() body: CreateUserDto): Promise<UserOrmEntity> {
+  @Post('create-user')
+  async createUser(@Body() body: CreateUserDto): Promise<UserOrmEntity> {
     return await this._authService.register(body);
   }
 
@@ -74,8 +76,16 @@ export class AppController {
   }
 
   /** Student */
-  @Post('student')
+  @Public()
+  @Post('register')
   async create(@Body() body: CreateStudentDto): Promise<StudentOrmEntity> {
     return await this._studentService.create(body);
+  }
+
+  @Get('students')
+  async getAllStudent(
+    @Query() query: any,
+  ): Promise<PaginatedResponse<StudentOrmEntity>> {
+    return await this._studentService.getAllStudent(query);
   }
 }
