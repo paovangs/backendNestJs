@@ -88,4 +88,9 @@ export class AppController {
   ): Promise<PaginatedResponse<StudentOrmEntity>> {
     return await this._studentService.getAllStudent(query);
   }
+
+  @Delete('students/:id')
+  async deleteStudent(@Param('id') id: number): Promise<any> {
+    return await this._studentService.deleteStudent(id);
+  }
 }

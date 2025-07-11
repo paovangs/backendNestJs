@@ -62,4 +62,33 @@ export class StudentService {
 
     return paginateQueryBuilder(queryBuilder, page, limit);
   }
+
+  async deleteStudent(id: number): Promise<void> {
+    try {
+      await this.transactionManagerService.runInTransaction(
+        this.dataSource,
+        async (manager) => {
+          // Find student with related user_id
+          const student = await manager.findOne(StudentOrmEntity, {
+            where: { id },
+          });
+
+          if (!student) {
+            throw new Error(`Student with id ${id} not found`);
+          }
+
+          // Delete the student
+          await manager.delete(StudentOrmEntity, id);
+
+          // Optionally delete the user as well
+          if (student.user_id) {
+            await manager.delete(UserOrmEntity, student.user_id);
+          }
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
