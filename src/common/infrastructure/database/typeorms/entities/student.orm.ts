@@ -7,8 +7,10 @@ import {
   DeleteDateColumn,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { UserOrmEntity } from './user.orm';
+import { StudentEducationOrmEntity } from './student-education.orm';
 
 @Entity('students')
 export class StudentOrmEntity {
@@ -47,4 +49,7 @@ export class StudentOrmEntity {
   @OneToOne(() => UserOrmEntity)
   @JoinColumn({ name: 'user_id' })
   user: UserOrmEntity;
+
+  @OneToMany(() => StudentEducationOrmEntity, (education) => education.student)
+  educations: StudentEducationOrmEntity[];
 }

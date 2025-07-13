@@ -6,6 +6,10 @@ import { TransactionModule } from '../../transaction/transaction.module';
 import { SeederService } from './seeders/seeder.service';
 import { UsersSeeder } from './seeders/user.seed';
 import { StudentOrmEntity } from './entities/student.orm';
+import { StudentEducationOrmEntity } from './entities/student-education.orm';
+import { TeacherOrmEntity } from './entities/teacher.orm';
+import { CourseCategoryOrmEntity } from './entities/course-category.orm';
+import { CourseOrmEntity } from './entities/course.orm';
 
 @Global()
 @Module({
@@ -25,14 +29,28 @@ import { StudentOrmEntity } from './entities/student.orm';
         username: configService.getOrThrow('DB_USERNAME'),
         password: configService.getOrThrow('DB_PASSWORD'),
         database: configService.getOrThrow('DB_NAME'),
-        entities: [UserOrmEntity, StudentOrmEntity],
+        entities: [
+          UserOrmEntity,
+          StudentOrmEntity,
+          StudentEducationOrmEntity,
+          TeacherOrmEntity,
+          CourseCategoryOrmEntity,
+          CourseOrmEntity,
+        ],
         subscribers: [],
         synchronize: configService.getOrThrow('DB_SYNCHRONIZE') === 'true',
         logging: configService.getOrThrow('DB_LOGGING') === 'true',
         migrationsTableName: 'migrations',
       }),
     }),
-    TypeOrmModule.forFeature([UserOrmEntity, StudentOrmEntity]), // ຖ້າບໍ່ໃຊ້ອັນນີ້ຈະບໍ່ສາມາດເອີ້ນໃຊ້ Repository<User>
+    TypeOrmModule.forFeature([
+      UserOrmEntity,
+      StudentOrmEntity,
+      StudentEducationOrmEntity,
+      TeacherOrmEntity,
+      CourseCategoryOrmEntity,
+      CourseOrmEntity,
+    ]), // ຖ້າບໍ່ໃຊ້ອັນນີ້ຈະບໍ່ສາມາດເອີ້ນໃຊ້ Repository<User>
   ],
   exports: [TypeOrmModule],
   providers: [UsersSeeder, SeederService],

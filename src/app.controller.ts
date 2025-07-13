@@ -21,6 +21,9 @@ import { StudentService } from './modules/student/students.service';
 import { CreateStudentDto } from './modules/student/dto/create.dto';
 import { StudentOrmEntity } from './common/infrastructure/database/typeorms/entities/student.orm';
 import { PaginatedResponse } from './common/pagination/pagination.response';
+import { UpdateStudentDto } from './modules/student/dto/update.dto';
+import { AddEducationDto } from './modules/student/dto/add-profile.dto';
+import { StudentEducationOrmEntity } from './common/infrastructure/database/typeorms/entities/student-education.orm';
 
 @Controller()
 export class AppController {
@@ -89,8 +92,45 @@ export class AppController {
     return await this._studentService.getAllStudent(query);
   }
 
+  @Put('students/:id')
+  async updateStudent(
+    @Param('id') id: number,
+    @Body() body: UpdateStudentDto,
+  ): Promise<StudentOrmEntity> {
+    return await this._studentService.updateStudent(id, body);
+  }
+
   @Delete('students/:id')
   async deleteStudent(@Param('id') id: number): Promise<any> {
     return await this._studentService.deleteStudent(id);
+  }
+
+  /** Update Student Profile */
+  @Get('students/profile')
+  async getAllStudentProfile(
+    @Query() query: any,
+  ): Promise<PaginatedResponse<StudentEducationOrmEntity>> {
+    return await this._studentService.getAllStudentProfile(query);
+  }
+
+  @Post('students/add-profile/:id')
+  async addStudentProfile(
+    @Param('id') id: number,
+    @Body() body: AddEducationDto,
+  ): Promise<StudentEducationOrmEntity> {
+    return await this._studentService.addStudentProfile(id, body);
+  }
+
+  @Put('students/update-profile/:id')
+  async updateStudentProfile(
+    @Param('id') id: number,
+    @Body() body: AddEducationDto,
+  ): Promise<StudentEducationOrmEntity> {
+    return await this._studentService.updateStudentProfile(id, body);
+  }
+
+  @Delete('students/delete-profile/:id')
+  async deleteStudentProfile(@Param('id') id: number): Promise<void> {
+    return await this._studentService.deleteStudentProfile(id);
   }
 }

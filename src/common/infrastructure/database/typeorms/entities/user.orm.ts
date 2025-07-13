@@ -8,6 +8,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { StudentOrmEntity } from './student.orm';
+import { TeacherOrmEntity } from './teacher.orm';
 
 @Entity('users')
 export class UserOrmEntity {
@@ -36,4 +37,7 @@ export class UserOrmEntity {
 
   @OneToOne(() => StudentOrmEntity, (student) => student.user)
   student: StudentOrmEntity;
+
+  @OneToOne(() => TeacherOrmEntity, (teacher) => teacher.user)
+  teacher: TeacherOrmEntity;
 }
