@@ -6,6 +6,7 @@ import { StudentEducationOrmEntity } from './typeorms/entities/student-education
 import { TeacherOrmEntity } from './typeorms/entities/teacher.orm';
 import { CourseCategoryOrmEntity } from './typeorms/entities/course-category.orm';
 import { CourseOrmEntity } from './typeorms/entities/course.orm';
+import { ApplyCourseOrmEntity } from './typeorms/entities/apply-course.orm';
 
 config(); // ໂຫຼດຈາກ .env
 export const dataSource = new DataSource({
@@ -24,6 +25,7 @@ export const dataSource = new DataSource({
     TeacherOrmEntity,
     CourseCategoryOrmEntity,
     CourseOrmEntity,
+    ApplyCourseOrmEntity,
   ], // ເພີ່ມ entities ທີ່ຈະໃຊ້
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   migrationsTableName: 'migrations', // ຊື່ table ສຳຫຼັບເກັບ migrations

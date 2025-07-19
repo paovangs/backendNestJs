@@ -10,6 +10,7 @@ import { StudentEducationOrmEntity } from './entities/student-education.orm';
 import { TeacherOrmEntity } from './entities/teacher.orm';
 import { CourseCategoryOrmEntity } from './entities/course-category.orm';
 import { CourseOrmEntity } from './entities/course.orm';
+import { ApplyCourseOrmEntity } from './entities/apply-course.orm';
 
 @Global()
 @Module({
@@ -36,6 +37,7 @@ import { CourseOrmEntity } from './entities/course.orm';
           TeacherOrmEntity,
           CourseCategoryOrmEntity,
           CourseOrmEntity,
+          ApplyCourseOrmEntity,
         ],
         subscribers: [],
         synchronize: configService.getOrThrow('DB_SYNCHRONIZE') === 'true',
@@ -50,6 +52,7 @@ import { CourseOrmEntity } from './entities/course.orm';
       TeacherOrmEntity,
       CourseCategoryOrmEntity,
       CourseOrmEntity,
+      ApplyCourseOrmEntity,
     ]), // ຖ້າບໍ່ໃຊ້ອັນນີ້ຈະບໍ່ສາມາດເອີ້ນໃຊ້ Repository<User>
   ],
   exports: [TypeOrmModule],

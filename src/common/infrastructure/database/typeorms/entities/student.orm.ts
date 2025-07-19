@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { UserOrmEntity } from './user.orm';
 import { StudentEducationOrmEntity } from './student-education.orm';
+import { ApplyCourseOrmEntity } from './apply-course.orm';
 
 @Entity('students')
 export class StudentOrmEntity {
@@ -52,4 +53,7 @@ export class StudentOrmEntity {
 
   @OneToMany(() => StudentEducationOrmEntity, (education) => education.student)
   educations: StudentEducationOrmEntity[];
+
+  @OneToMany(() => ApplyCourseOrmEntity, (apply) => apply.student)
+  applyCourses: ApplyCourseOrmEntity[];
 }

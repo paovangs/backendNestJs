@@ -7,9 +7,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { TeacherOrmEntity } from './teacher.orm';
 import { CourseCategoryOrmEntity } from './course-category.orm';
+import { ApplyCourseOrmEntity } from './apply-course.orm';
 
 export enum CourseStatus {
   OPEN = 'open',
@@ -76,4 +78,7 @@ export class CourseOrmEntity {
   @ManyToOne(() => CourseCategoryOrmEntity, (category) => category.courses)
   @JoinColumn({ name: 'category_id' })
   category: CourseCategoryOrmEntity;
+
+  @OneToMany(() => ApplyCourseOrmEntity, (apply) => apply.course)
+  applyCourses: ApplyCourseOrmEntity[];
 }

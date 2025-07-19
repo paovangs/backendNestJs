@@ -110,3 +110,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - pnpm install --save-dev @types/passport-local
 - pnpm install --save @nestjs/jwt passport-jwt
 - pnpm install --save-dev @types/passport-jwt
+
+# Config Mailer
+
+- pnpm install @nestjs-modules/mailer
+- pnpm install handlebars

@@ -5,18 +5,21 @@ import { TypeOrmRepositoryModule } from './common/infrastructure/database/typeor
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt.guard';
-import { StudentService } from './modules/student/students.service';
 import { TransactionModule } from './common/infrastructure/transaction/transaction.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
 import { CourseModule } from './modules/course/course.module';
+import { StudentModule } from './modules/student/student.module';
+import { MailModule } from './common/infrastructure/mailer/mail.module';
 
 @Module({
   imports: [
+    MailModule,
     TypeOrmRepositoryModule,
     TransactionModule,
     AuthModule,
     TeacherModule,
     CourseModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [
@@ -25,7 +28,6 @@ import { CourseModule } from './modules/course/course.module';
       useClass: JwtAuthGuard,
     },
     AppService,
-    StudentService,
   ],
   exports: [],
 })

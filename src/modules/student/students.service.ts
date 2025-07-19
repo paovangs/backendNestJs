@@ -17,6 +17,9 @@ import { paginateQueryBuilder } from 'src/common/utils/pagination.builder';
 import { UpdateStudentDto } from './dto/update.dto';
 import { StudentEducationOrmEntity } from 'src/common/infrastructure/database/typeorms/entities/student-education.orm';
 import { AddEducationDto } from './dto/add-profile.dto';
+import { CourseOrmEntity } from 'src/common/infrastructure/database/typeorms/entities/course.orm';
+import { ApplyCourseOrmEntity } from 'src/common/infrastructure/database/typeorms/entities/apply-course.orm';
+import { MailService } from 'src/common/infrastructure/mailer/mail.service';
 
 @Injectable()
 export class StudentService {
@@ -30,6 +33,13 @@ export class StudentService {
     private readonly dataSource: DataSource,
     @InjectRepository(StudentEducationOrmEntity)
     private _studentEducationRepo: Repository<StudentEducationOrmEntity>,
+    @InjectRepository(CourseOrmEntity)
+    private _course: Repository<CourseOrmEntity>,
+    @InjectRepository(UserOrmEntity)
+    private _user: Repository<UserOrmEntity>,
+    @InjectRepository(ApplyCourseOrmEntity)
+    private _applyCourse: Repository<ApplyCourseOrmEntity>,
+    private readonly _mailService: MailService,
   ) {}
   async create(body: CreateStudentDto): Promise<StudentOrmEntity> {
     try {
@@ -50,6 +60,10 @@ export class StudentService {
               name: body.name,
               user_id: savedUser.id,
             });
+
+            /** Send Email */
+            await this._mailService.sendEmail(body.email, body.name);
+
             return await manager.save(StudentOrmEntity, student);
           },
         );
@@ -229,5 +243,70 @@ export class StudentService {
     if (result.affected === 0) {
       throw new NotFoundException(`Student Education with ID ${id} not found`);
     }
+  }
+
+  /** Apply Course */
+
+  /** Course Apply */
+  async applyCourse(userId: number, body: any): Promise<any> {
+    const user = await this._user.findOne({
+      where: { id: userId },
+      relations: ['student'],
+    });
+
+    if (!user || !user.student) {
+      throw new NotFoundException('Student not found for this user');
+    }
+    const studentId = user?.student.id;
+
+    const course = await this._course.findOne({
+      where: { id: body.course_id },
+    });
+    if (!course) {
+      throw new NotFoundException(`Course with ID ${body.course_id} not found`);
+    }
+
+    const existedApply = await this._applyCourse.findOne({
+      where: {
+        course_id: course.id,
+        student_id: user.student.id,
+      },
+    });
+
+    if (existedApply) {
+      throw new BadRequestException('You have already applied for this course');
+    }
+
+    const createApply = this._applyCourse.create({
+      course_id: course?.id,
+      student_id: studentId,
+      price: course?.price,
+    });
+    const savedCourse = await this._applyCourse.save(createApply);
+
+    return savedCourse;
+  }
+
+  async myApplyCourse(id: number): Promise<any> {
+    const user = await this.findUserById(id);
+
+    const applyCourses = await this._applyCourse.find({
+      where: { student_id: user.student.id },
+      relations: ['student', 'course'],
+    });
+
+    return applyCourses;
+  }
+
+  async findUserById(id): Promise<UserOrmEntity> {
+    const user = await this._user.findOne({
+      where: { id },
+      relations: ['student'],
+    });
+
+    if (!user || !user.student) {
+      throw new NotFoundException('Student not found for this user');
+    }
+    return user;
   }
 }
