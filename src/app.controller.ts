@@ -133,4 +133,10 @@ export class AppController {
   async deleteStudentProfile(@Param('id') id: number): Promise<void> {
     return await this._studentService.deleteStudentProfile(id);
   }
+
+  @Public()
+  @Get('test')
+  getAllTest(): string {
+    return 'pass';
+  }
 }
