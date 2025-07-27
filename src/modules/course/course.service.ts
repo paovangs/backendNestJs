@@ -35,7 +35,8 @@ export class CourseService {
     const queryBuilder = this._course
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.teacher', 'teacher')
-      .leftJoinAndSelect('course.category', 'category');
+      .leftJoinAndSelect('course.category', 'category')
+      .orderBy('course.id', 'ASC');
 
     return paginateQueryBuilder(queryBuilder, page, limit);
   }
