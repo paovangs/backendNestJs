@@ -13,7 +13,7 @@ export const dataSource = new DataSource({
   type: 'postgres', // ຖ້າເປັນ mySQL ກໍ່ໃຊ້ 'mysql'
   host: process.env.DB_HOST || 'localhost',
   port: Number(process.env.DB_PORT) || 5432,
-  username: process.env.DB_USER || '',
+  username: process.env.DB_USERNAME || '',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'apply_course',
   synchronize: Boolean(process.env.DB_SYNCHRONIZE) || false,
