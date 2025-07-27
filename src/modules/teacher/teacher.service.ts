@@ -24,6 +24,17 @@ export class TeacherService {
     private readonly dataSource: DataSource,
   ) {}
 
+  async getAllTeachers(): Promise<TeacherOrmEntity[]> {
+    try {
+      return await this._teacherRepository.find({
+        relations: ['user'],
+      });
+    } catch (error) {
+      console.error('Error fetching all teachers:', error);
+      throw new BadRequestException('Failed to fetch teachers');
+    }
+  }
+
   async createTeacher(body: CreateTeacherDto): Promise<TeacherOrmEntity> {
     try {
       const savedTeacher =

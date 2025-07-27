@@ -8,8 +8,8 @@ import { UpdateTeacherDto } from './dto/update.dto';
 export class TeacherController {
   constructor(private readonly _teacherService: TeacherService) {}
   @Get('get-all')
-  getAll() {
-    return 'paovang';
+  async getAll() {
+    return await this._teacherService.getAllTeachers();
   }
 
   @Post('create-teacher')

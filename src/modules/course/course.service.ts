@@ -14,6 +14,8 @@ import {
 } from 'src/common/infrastructure/database/typeorms/entities/course.orm';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { PaginationDto } from 'src/common/pagination/dto/pagination.dto';
+import { StatusDto } from './dto/status.dot';
 
 @Injectable()
 export class CourseService {
@@ -23,6 +25,20 @@ export class CourseService {
     @InjectRepository(CourseOrmEntity)
     private _course: Repository<CourseOrmEntity>,
   ) {}
+
+  async getAll(
+    query: PaginationDto,
+  ): Promise<PaginatedResponse<CourseOrmEntity>> {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 10;
+
+    const queryBuilder = this._course
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.teacher', 'teacher')
+      .leftJoinAndSelect('course.category', 'category');
+
+    return paginateQueryBuilder(queryBuilder, page, limit);
+  }
 
   /** CRUD Course */
   async createCourse(body: CreateCourseDto): Promise<CourseOrmEntity> {
@@ -102,6 +118,23 @@ export class CourseService {
 
     return paginateQueryBuilder(queryBuilder, page, limit);
   }
+
+  /** Update Status */
+  updateStatus = async (
+    id: number,
+    body: StatusDto,
+  ): Promise<CourseOrmEntity> => {
+    const course = await this._course.findOne({
+      where: { id },
+    });
+    if (!course) {
+      throw new NotFoundException(`Course with ID ${id} not found`);
+    }
+
+    course.status = (body.status as CourseStatus) ?? course.status;
+
+    return await this._course.save(course);
+  };
 
   async createCategory(
     body: CreateCourseCategoryDto,
